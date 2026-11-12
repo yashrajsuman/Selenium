@@ -1,0 +1,19 @@
+# Selenium Grid in Docker. Start:  docker compose up -d
+# Run tests against it:            mvn test -Dgrid.url=http://localhost:4444 -Dheadless=true
+# Watch the browser live (noVNC):  http://localhost:7900  (password: secret)
+services:
+  selenium-chrome:
+    image: selenium/standalone-chrome:latest
+    ports:
+      - "4444:4444"
+      - "7900:7900"
+    shm_size: 2g
+    environment:
+      - SE_NODE_MAX_SESSIONS=4
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+
+  # Uncomment for cross-browser:
+  # selenium-firefox:
+  #   image: selenium/standalone-firefox:latest
+  #   ports: ["4445:4444"]
+  #   shm_size: 2g

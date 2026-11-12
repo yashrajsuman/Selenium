@@ -1,0 +1,15 @@
+ui-tests:
+  image: maven:3.9-eclipse-temurin-17
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq wget gnupg
+    - wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/chrome.gpg
+    - echo "deb [arch=amd64 signed-by=/usr/share/keyrings/chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/chrome.list
+    - apt-get update -qq && apt-get install -y -qq google-chrome-stable
+  script:
+    - mvn -B test -Dheadless=true -Dbase.url=${BASE_URL:-https://the-internet.herokuapp.com} -Dgroups=${GROUPS:-smoke}
+  artifacts:
+    when: always
+    reports:
+      junit: target/surefire-reports/*.xml
+    paths:
+      - target/screenshots
